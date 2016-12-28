@@ -62,7 +62,7 @@ public class World {
 				if(body1.equals(body2)) {
 					continue;
 				}
-				if(body2.getMass() <= 1) {
+				if(body2.getMass() <= 10) {
 					continue;
 				}
 				double force = MathUtils.getAttraction(body1, body2);
@@ -92,34 +92,34 @@ public class World {
 					//body1.setVelocity(body1.velX / 1.3d, body1.velY / 1.3d);
 					//MathUtils.addVelocityBasedOnAngle(body1, MathUtils.getAngle(body1, body2), -(body2.getMass() / body1.getMass()) * 2);
 //					double mass = body2.getMass();
-					double velocity1 = Math.abs(MathUtils.getDistance(body1.velX, body1.velY, 0, 0) / 300d);
-					double velocity2 = Math.abs(MathUtils.getDistance(body2.velX, body2.velY, 0, 0) / 300d);
+//					double velocity1 = Math.abs(MathUtils.getDistance(body1.velX, body1.velY, 0, 0) / 3000d);
+//					double velocity2 = Math.abs(MathUtils.getDistance(body2.velX, body2.velY, 0, 0) / 3000d);
 //					System.out.println(velocity2);
 //					System.out.println(velocity2);
-					if(body2.getMass() <= 1) {
+					if(body2.getMass() <= 10) {
 						removeBody(body2);
-						for(int p = 0; p < 4; p++) {
+						for(int p = 0; p < 1; p++) {
 							Particle part = new Particle(body2.x, body2.y, 
-									body2.velX * MathUtils.randomDouble(random, 0.5, 1), 
-									body2.velY * MathUtils.randomDouble(random, 0.5, 1), 0.7f, new Color(0.3f, 0.3f, 0.3f));
+									body2.velX * MathUtils.randomDouble(random, 0.05, 0.1) * 2, 
+									body2.velY * MathUtils.randomDouble(random, 0.05, 0.1) * 2, 0.7f, new Color(0.3f, 0.3f, 0.3f));
 							part.alphaDec = 0.1f / 1f;
 							part.scale = MathUtils.randomDouble(random, 1, 10);
 							part.cross = false;
 							addParticle(part);
 						}
-						for(int p = 0; p < 4; p++) {
+						for(int p = 0; p < 1; p++) {
 							Particle part = new Particle(body2.x, body2.y, 
-									body2.velX * MathUtils.randomDouble(random, 0.01, 0.6), 
-									body2.velY * MathUtils.randomDouble(random, 0.01, 0.6), 0.7f, new Color(0.7f, 0.7f, 0.7f));
+									body2.velX * MathUtils.randomDouble(random, 0.001, 0.06) * 2, 
+									body2.velY * MathUtils.randomDouble(random, 0.001, 0.06) * 2, 0.7f, new Color(0.7f, 0.7f, 0.7f));
 							part.alphaDec = 0.25f / 1f;
 							part.scale = MathUtils.randomDouble(random, 1, 10);
 							part.cross = false;
 							addParticle(part);
 						}
-						for(int p = 0; p < 2; p++) {
+						for(int p = 0; p < 1; p++) {
 							Particle part = new Particle(body2.x, body2.y, 
-									body2.velX * MathUtils.randomDouble(random, 0.01, 0.1), 
-									body2.velY * MathUtils.randomDouble(random, 0.01, 0.1), 0.7f, new Color(1f, 1f, 1f));
+									body2.velX * MathUtils.randomDouble(random, 0.001, 0.01) * 2, 
+									body2.velY * MathUtils.randomDouble(random, 0.001, 0.01) * 2, 0.7f, new Color(1f, 1f, 1f));
 							part.alphaDec = 0.5f / 1f;
 							part.scale = MathUtils.randomDouble(random, 1, 10);
 							part.cross = false;
@@ -127,63 +127,23 @@ public class World {
 						}
 						continue;
 					}
-					if(body2.getMass() <= 1) {
+					if(body2.getMass() <= 10) {
 						continue;
 					}
 					double massRatio = body2.getMass() / body1.getMass();
 					//System.out.println(velocity1);
 					if((body1.getMass() >= body2.getMass())) {
 						int pieces = 10;
-						for(int i = 0; i < pieces * 5 / 10; i++) {
+						for(int i = 0; i < pieces; i++) {
 							Body body = new Body(body2.x + MathUtils.randomDouble(random, -body2.collider.radius, body2.collider.radius),
 									body2.y + MathUtils.randomDouble(random, -body2.collider.radius, body2.collider.radius), 
 									0, 
 									0, body2.getMass() / (double)pieces, body2.density);
-							body.addVelocity(MathUtils.randomDouble(random, -0.1, 1) + body2.velX / 1.5,
-									MathUtils.randomDouble(random, -0.1, 1) + body2.velY / 1.5);
-							MathUtils.addVelocityBasedOnAngle(body, MathUtils.getAngle(body2, body1) + 
-									MathUtils.randomDouble(random, -60, 60), velocity1);
+							body.addVelocity(MathUtils.randomDouble(random, -0.1, 1) + body2.velX,
+									MathUtils.randomDouble(random, -0.1, 1) + body2.velY);
+//							MathUtils.addVelocityBasedOnAngle(body, MathUtils.getAngle(body2, body1) + 
+//									MathUtils.randomDouble(random, -60, 60), velocity1);
 							addBody(body);
-						}
-						for(int i = 0; i < pieces * 5 / 10; i++) {
-							Body body = new Body(body2.x + MathUtils.randomDouble(random, -body2.collider.radius, body2.collider.radius),
-									body2.y + MathUtils.randomDouble(random, -body2.collider.radius, body2.collider.radius), 
-									0, 
-									0, body2.getMass() / (double)pieces, body2.density);
-							body.addVelocity(MathUtils.randomDouble(random, -0.1, 1) + -body2.velX / 2d,
-									MathUtils.randomDouble(random, -0.1, 1) + -body2.velY / 2d);
-							MathUtils.addVelocityBasedOnAngle(body, MathUtils.getAngle(body1, body2) + 
-									-90, MathUtils.randomDouble(random, 100, 200) * (velocity2 / 100d));
-							MathUtils.addVelocityBasedOnAngle(body, MathUtils.getAngle(body1, body2) + 
-									90, MathUtils.randomDouble(random, 100, 200) * (velocity2 / 100d));
-							//addBody(body);
-//							for(int p = 0; p < 4; p++) {
-//								Particle part = new Particle(body.x, body.y, 
-//										body.velX * MathUtils.randomDouble(random, 0.5, 1), 
-//										body.velY * MathUtils.randomDouble(random, 0.5, 1), 0.7f, new Color(0.3f, 0.3f, 0.3f));
-//								part.alphaDec = 0.1f / 1f;
-//								part.scale = MathUtils.randomDouble(random, 1, 10);
-//								part.cross = false;
-//								addParticle(part);
-//							}
-//							for(int p = 0; p < 4; p++) {
-//								Particle part = new Particle(body.x, body.y, 
-//										body.velX * MathUtils.randomDouble(random, 0.01, 0.6), 
-//										body.velY * MathUtils.randomDouble(random, 0.01, 0.6), 0.7f, new Color(0.7f, 0.7f, 0.7f));
-//								part.alphaDec = 0.25f / 1f;
-//								part.scale = MathUtils.randomDouble(random, 1, 10);
-//								part.cross = false;
-//								addParticle(part);
-//							}
-//							for(int p = 0; p < 2; p++) {
-//								Particle part = new Particle(body.x, body.y, 
-//										body.velX * MathUtils.randomDouble(random, 0.01, 0.1), 
-//										body.velY * MathUtils.randomDouble(random, 0.01, 0.1), 0.7f, new Color(1f, 1f, 1f));
-//								part.alphaDec = 0.5f / 1f;
-//								part.scale = MathUtils.randomDouble(random, 1, 10);
-//								part.cross = false;
-//								addParticle(part);
-//							}
 						}
 						removeBody(body2);
 						body1.addVelocity(body2.velX / 10d * massRatio, body2.velY / 10d * massRatio);

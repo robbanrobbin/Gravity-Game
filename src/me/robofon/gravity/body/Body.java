@@ -20,6 +20,7 @@ public class Body {
 	public boolean move = true;
 	public Atmosphere atmosphere;
 	public double density = 1f;
+	public double lifeTime = 0;
 	
 	public Body(double x, double y, double velX, double velY, double mass, double density) {
 		this.x = x;
@@ -88,6 +89,7 @@ public class Body {
 	}
 
 	public void update(double delta) {
+		this.lifeTime += delta;
 		this.collider.radius = mass * density * 0.002;
 		this.x += this.velX * delta;
 		this.y += this.velY * delta;

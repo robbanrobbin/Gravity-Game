@@ -109,7 +109,7 @@ public class Gravity {
 		}
 	}
 
-	public GameCanvas getPanel() {
+	public GameCanvas getCanvas() {
 		return canvas;
 	}
 

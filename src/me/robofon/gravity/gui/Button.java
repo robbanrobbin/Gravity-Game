@@ -17,7 +17,7 @@ public class Button extends ClickableComponent {
 	@Override
 	public void update(double delta) {
 		this.hovered = false;
-		if(isPointInside(Gravity.getGame().getPanel().lastMouseX, Gravity.getGame().getPanel().lastMouseY)) {
+		if(isPointInside(Gravity.getGame().getCanvas().lastMouseX, Gravity.getGame().getCanvas().lastMouseY)) {
 			this.hovered = true;
 		}
 		super.update(delta);
