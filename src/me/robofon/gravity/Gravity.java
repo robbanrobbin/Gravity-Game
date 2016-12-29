@@ -36,7 +36,7 @@ public class Gravity {
 		game = new Gravity();
 		game.init();
 	}
-
+	
 	private void init() {
 		this.renderer = new Renderer();
 		this.canvas = new GameCanvas();
@@ -135,7 +135,7 @@ public class Gravity {
 		      long updateLength = now - lastLoopTime;
 		      lastLoopTime = now;
 		      delta = updateLength / ((double)OPTIMAL_TIME) / div / 2d;
-
+		      delta = Math.min(0.5, delta);
 		      // update the frame counter
 		      lastFpsTime += updateLength;
 		      fps++;

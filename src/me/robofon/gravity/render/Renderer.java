@@ -1,11 +1,13 @@
 package me.robofon.gravity.render;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.image.RescaleOp;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,8 @@ import me.robofon.gravity.Gravity;
 import me.robofon.gravity.body.Body;
 import me.robofon.gravity.body.Particle;
 import me.robofon.gravity.body.Trail;
+import me.robofon.gravity.physics.CircleCollider;
+import me.robofon.gravity.physics.Collider;
 
 
 public class Renderer {
@@ -52,11 +56,11 @@ public class Renderer {
 	double lastyOffset = 0;
 	
 	public double getXInGame(int x) {
-		return (((((renderX + x) - ((Gravity.getGame().getPanel().WIDTH / 2))) / zoom) - xOffset));
+		return (((((renderX + x) - ((Gravity.getGame().getCanvas().WIDTH / 2))) / zoom) - xOffset));
 	}
 	
 	public double getYInGame(int y) {
-		return (((((renderY + y) - ((Gravity.getGame().getPanel().HEIGHT / 2))) / zoom) - yOffset));
+		return (((((renderY + y) - ((Gravity.getGame().getCanvas().HEIGHT / 2))) / zoom) - yOffset));
 	}
 	
 	public double getY(double yy) {
@@ -106,8 +110,8 @@ public class Renderer {
 		g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 		
 		Gravity game = Gravity.getGame();
-		xHalfWidth = ((game.getPanel().WIDTH / 2) / zoom);
-		yHalfHeight = ((game.getPanel().HEIGHT / 2) / zoom);
+		xHalfWidth = ((game.getCanvas().WIDTH / 2) / zoom);
+		yHalfHeight = ((game.getCanvas().HEIGHT / 2) / zoom);
 		if(Gravity.getGame().useCache) {
 			if(lastZoom != zoom) {
 				clearCache();
@@ -145,13 +149,13 @@ public class Renderer {
 				}
 				double x = getX(body.x);
 				double y = getY(body.y);
-				if(x - body.getCollider().radius * 2.0 * zoom > game.getPanel().WIDTH) {
+				if(x - body.getCollider().radius * 2.0 * zoom > game.getCanvas().WIDTH) {
 					continue;
 				}
 				if(x + body.getCollider().radius * 2.0 * zoom < 0) {
 					continue;
 				}
-				if(y - body.getCollider().radius * 2.0 * zoom > game.getPanel().HEIGHT) {
+				if(y - body.getCollider().radius * 2.0 * zoom > game.getCanvas().HEIGHT) {
 					continue;
 				}
 				if(y + body.getCollider().radius * 2.0 * zoom < 0) {
@@ -165,11 +169,28 @@ public class Renderer {
 					paintedY.add(y);
 				}
 				double radius = body.getCollider().radius * zoom * 2.0;
-				if(radius > 2) {
-					drawCenteredCircle(g, x, y, radius);
+				if(body.getCollider().radius > 0.1) {
+					if(radius > 2) {
+						drawCenteredCircle(g, x, y, radius);
+					}
+					else {
+						drawPixel(g, x, y);
+					}
 				}
 				else {
+//					double imageScale = 4 / zoom;
+//					double imgx = x - (50 / (imageScale * zoom)) * zoom;
+//					double imgy = y - (50 / (imageScale * zoom)) * zoom;
+//					AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.1f);
+//					g.setComposite(ac);
+//					g.drawImage(getImage("light_darkest.png"), (int)imgx, (int)imgy, (int)(100 / imageScale), (int)(100 / imageScale), game.getCanvas());
+//					g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 					drawPixel(g, x, y);
+				}
+				if(Collider.collision(Gravity.getGame().mouseXinGame, Gravity.getGame().mouseYinGame, body.getCollider())) {
+					g.setColor(Color.WHITE);
+					String s = String.valueOf(body.getMass());
+					g.drawString(s, (int)x - g.getFontMetrics().stringWidth(s) / 2, (int)y - 10);
 				}
 			}
 			
@@ -245,11 +266,11 @@ public class Renderer {
 				flashTimer = -1;
 				doFlash = false;
 			}
-			int mouseX = game.getPanel().lastMouseX;
-			Gravity.getGame().mouseX = (int) (((((renderX + mouseX) - ((game.getPanel().WIDTH / 2)))) - xOffset) / zoom);
+			int mouseX = game.getCanvas().lastMouseX;
+			Gravity.getGame().mouseX = (int) (((((renderX + mouseX) - ((game.getCanvas().WIDTH / 2)))) - xOffset) / zoom);
 			
-			int mouseY = game.getPanel().lastMouseY;
-			Gravity.getGame().mouseY = (int) (((((renderY + mouseY) - ((game.getPanel().HEIGHT / 2)))) - yOffset) / zoom);
+			int mouseY = game.getCanvas().lastMouseY;
+			Gravity.getGame().mouseY = (int) (((((renderY + mouseY) - ((game.getCanvas().HEIGHT / 2)))) - yOffset) / zoom);
 			
 			if(Gravity.getGame().useCache) {
 				paintedX.clear();

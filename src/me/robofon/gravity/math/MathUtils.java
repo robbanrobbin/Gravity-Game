@@ -49,6 +49,19 @@ public class MathUtils {
 		body.addVelocity(x, y);
 	}
 	
+	public static double[] getVectorsBasedOnAngle(double angle, double multiplier) {
+		double angleA = Math.toRadians(normalizeAngle(angle));
+		double x = Math.cos(angleA) * multiplier;
+		double y = Math.sin(angleA) * multiplier;
+		return new double[]{x, y};
+	}
+	
+	public static double getRelativeVelocity(Body b1, Body b2) {
+		double vel1 = getDistance(b1.velX - b2.velX, b1.velY - b2.velY, 0, 0);
+		
+		return vel1;
+	}
+	
 	public static double getAngle(Body b1, Body b2) {
 		return getAngle(b1.x, b1.y, b2.x, b2.y);
 	}

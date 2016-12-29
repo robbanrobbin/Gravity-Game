@@ -21,6 +21,7 @@ public class Body {
 	public Atmosphere atmosphere;
 	public double density = 1f;
 	public double lifeTime = 0;
+	public boolean checked = false;
 	
 	public Body(double x, double y, double velX, double velY, double mass, double density) {
 		this.x = x;
@@ -89,6 +90,7 @@ public class Body {
 	}
 
 	public void update(double delta) {
+		checked = false;
 		this.lifeTime += delta;
 		this.collider.radius = mass * density * 0.002;
 		this.x += this.velX * delta;
@@ -133,6 +135,16 @@ public class Body {
 		else {
 			return atmosphere.maxDensity >= 0;
 		}
+	}
+	
+	public void markChecked() {
+		checked = true;
+	}
+	
+	public Body createBodyFromMass(double massTaken) {
+		this.mass -= massTaken;
+		Body body = new Body(0, 0, 0, 0, massTaken, density);
+		return body;
 	}
 	
 }

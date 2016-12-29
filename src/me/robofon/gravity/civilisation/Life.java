@@ -4,9 +4,15 @@ public class Life {
 	
 	private int health = 0;
 	
+	public Life() {
+		this.health = getMaxHealth();
+	}
+	
 	public void update() {
 		
-		this.health = 20;
+		if(this.health <= 0) {
+			die();
+		}
 		
 	}
 	
@@ -15,6 +21,7 @@ public class Life {
 	}
 	
 	public void die() {
+		this.health = 0;
 		
 	}
 	
