@@ -64,7 +64,6 @@ public class World {
 				double force = MathUtils.getAttraction(body1, body2);
 				MathUtils.addVelocityBasedOnAngle(body1, MathUtils.getAngle(body1, body2),
 						force * body2.getMass() * delta);
-
 			}
 		}
 
@@ -100,7 +99,7 @@ public class World {
 					double relativeVelocity = MathUtils.getRelativeVelocity(body1, body2);
 					relativeVelocity = Math.abs(relativeVelocity);
 					
-					if (relativeVelocity < 50000 && body1.getMass() >= body2.getMass()) {
+					if (relativeVelocity < 30000 && body1.getMass() >= body2.getMass()) {
 						body2.markChecked();
 						removeBody(body2);
 						body1.setMass(body1.getMass() + body2.getMass());
@@ -156,7 +155,7 @@ public class World {
 												body2.collider.radius),
 										body2.y + MathUtils.randomDouble(random, -body2.collider.radius,
 												body2.collider.radius),
-										0, 0, body2.getMass() / 2 / ((double) pieces), body2.density);
+										0, 0, body2.getMass() / ((double) pieces), body2.density);
 								body.addVelocity(MathUtils.randomDouble(random, -0.1, 1) + body2.velX,
 										MathUtils.randomDouble(random, -0.1, 1) + body2.velY);
 								// MathUtils.addVelocityBasedOnAngle(body,
